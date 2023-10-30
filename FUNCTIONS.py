@@ -1,3 +1,4 @@
+from NODE import node
 def find_h_cost(node, end):
     dist = 0
     while node.x != end.x or node.y != end.y:
@@ -31,3 +32,20 @@ def find_h_cost(node, end):
 
 
     return dist
+
+def node_min_f_cost(matrix):
+    fcost = matrix[0].f_cost
+    obj = matrix[0]
+    for i in matrix:
+        if i.f_cost < fcost:
+            obj = i
+            fcost = i.f_cost
+
+    return obj
+
+def add_neighbour(current, open, closed, non_traversable):
+    to_be_added = [node(current.x - 1, current.y, current.g_cost+10), node(current.x - 1, current.y - 1, current.g_cost+14),
+                   node(current.x - 1, current.y + 1, current.g_cost+14), node(current.x, current.y + 1, current.g_cost+10), node(current.x, current.y - 1, current.g_cost+10),
+                   node(current.x + 1, current.y, current.g_cost+10), node(current.x + 1, current.y - 1, current.g_cost+14),
+                   node(current.x + 1, current.y + 1, current.g_cost+14)]
+
