@@ -1,51 +1,53 @@
 from NODE import node
-def find_h_cost(node, end):
-    dist = 0
-    while node.x != end.x or node.y != end.y:
-
-        if node.x == end.x:
-            dist += abs(end.y - node.y)*10
-            return dist
-
-        elif node.y == end.y:
-            dist += abs(end.x - node.x)*10
-            return dist
-
-        else:
-            if end.x > node.x and end.y > node.y:
-                node.x += 1
-                node.y += 1
-
-            elif end.x > node.x and end.y < node.y:
-                node.x += 1
-                node.y -= 1
-
-            elif end.x < node.x and end.y < node.y:
-                node.x -= 1
-                node.y -= 1
-
-            elif end.x < node.x and end.y > node.y:
-                node.x -= 1
-                node.y += 1
-
-            dist += 14
 
 
-    return dist
+def find_dist(node_a, node_b):
+    dist_x = abs(node_b.x - node_a.x)
+    dist_y = abs(node_b.y - node_a.y)
+
+    if dist_x < dist_y:
+        dist_x, dist_y = dist_y, dist_x
+
+    return 14 * dist_y + 10 * (dist_x - dist_y)
+
 
 def node_min_f_cost(matrix):
-    fcost = matrix[0].f_cost
-    obj = matrix[0]
-    for i in matrix:
-        if i.f_cost < fcost:
-            obj = i
-            fcost = i.f_cost
 
-    return obj
+    if len(matrix) > 0:
+        current = matrix[0]
+        for i in matrix:
+            if i.return_f_cost() < current.return_f_cost() or (i.return_f_cost() == current.return_f_cost() and i.h_cost < current.h_cost):
+                current = i
+        return current
 
-def add_neighbour(current, open, closed, non_traversable):
-    to_be_added = [node(current.x - 1, current.y, current.g_cost+10), node(current.x - 1, current.y - 1, current.g_cost+14),
-                   node(current.x - 1, current.y + 1, current.g_cost+14), node(current.x, current.y + 1, current.g_cost+10), node(current.x, current.y - 1, current.g_cost+10),
-                   node(current.x + 1, current.y, current.g_cost+10), node(current.x + 1, current.y - 1, current.g_cost+14),
-                   node(current.x + 1, current.y + 1, current.g_cost+14)]
 
+def return_node_from_pos(x, y, matrix):
+    return matrix[x][y]
+
+
+def get_neighbour(current, matrix):
+    neighbours = []
+
+    for x in range(-1, 2):
+        for y in range(-1, 2):
+            if x == 0 and y == 0:
+                continue
+
+            check_x = current.x + x
+            check_y = current.y + y
+
+            if 0 <= check_x <= len(matrix) and 0 <= check_y <= len(matrix[0]):
+                neighbours.append(matrix[check_x][check_y])
+
+    return neighbours
+
+
+def retrace_path(start, end):
+    path = []
+    current_node = end
+
+    while current_node != start:
+        path.append(current_node)
+        current_node = current_node.parent_node
+
+    return path.reverse()

@@ -1,18 +1,12 @@
+
 class node(object):
-    def __init__(self, x, y, g_cost=0):
+    def __init__(self, x, y, traversable=True):
         self.x = x
         self.y = y
-        self.g_cost = g_cost
+        self.g_cost = 0
         self.h_cost = 0
-        self.f_cost = 0
-        self.prev_node = None
-        self.evaluated = False
+        self.parent_node = None
+        self.traversable = traversable
 
-    def evaluate(self):
-        self.evaluated = True
-
-    def set_g_cost(self):
-        return
-
-    def set_f_cost(self):
-        self.f_cost = self.h_cost + self.g_cost
+    def return_f_cost(self):
+        return self.h_cost + self.g_cost
