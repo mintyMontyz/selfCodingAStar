@@ -22,7 +22,7 @@ def node_min_f_cost(matrix):
 
 
 def return_node_from_pos(x, y, matrix):
-    return matrix[x][y]
+    return matrix[y][x]
 
 
 def get_neighbour(current, matrix):
@@ -36,9 +36,8 @@ def get_neighbour(current, matrix):
             check_x = current.x + x
             check_y = current.y + y
 
-            if 0 <= check_x <= len(matrix) and 0 <= check_y <= len(matrix[0]):
-                neighbours.append(matrix[check_x][check_y])
-
+            if 0 <= check_x < len(matrix) and 0 <= check_y < len(matrix[0]):
+                neighbours.append(matrix[check_y][check_x])
     return neighbours
 
 
@@ -49,7 +48,5 @@ def retrace_path(start, end):
     while current_node != start:
         path.append(current_node)
         current_node = current_node.parent_node
-
-    path.reverse()
 
     return path

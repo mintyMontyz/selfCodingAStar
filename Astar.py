@@ -1,21 +1,18 @@
 from FUNCTIONS import *
 
-WIDTH, HEIGHT = 20, 20
 
+def run_a_star(start_vector, end_vector, dimensions):
+    matrix_field = [[node(x, y) for x in range(dimensions[0])] for y in range(dimensions[1])]
 
-matrix_field = [[node(i, j) for i in range(WIDTH)] for j in range(HEIGHT)]
+    open_matrix = []  # open needs to be evaluated
 
-open_matrix = []  # open needs to be evaluated
+    closed_matrix = []  # closed already evaluated
 
-closed_matrix = []  # closed already evaluated
+    start = return_node_from_pos(start_vector[0], start_vector[1], matrix_field)
+    end = return_node_from_pos(end_vector[0], end_vector[1], matrix_field)
 
-start = return_node_from_pos(7, 2, matrix_field)
-end = return_node_from_pos(5, 1, matrix_field)
+    open_matrix.append(start)
 
-open_matrix.append(start)
-
-
-def run_a_star():
     while True:
 
         current = node_min_f_cost(open_matrix)
@@ -23,20 +20,17 @@ def run_a_star():
         closed_matrix.append(current)
 
         if current == end:
-            return retrace_path(start, end), matrix_field
+            return retrace_path(start, end), matrix_field, open_matrix, closed_matrix, start, end
 
         for neighbour in get_neighbour(current, matrix_field):
             if not neighbour.traversable or neighbour in closed_matrix:
                 continue
 
             new_move_cost_to_neighbour = current.g_cost + find_dist(current, neighbour)
-            if new_move_cost_to_neighbour < neighbour.g_cost or neighbour not in open_matrix:
+            if new_move_cost_to_neighbour < neighbour.g_cost or (neighbour not in open_matrix):
                 neighbour.g_cost = new_move_cost_to_neighbour
                 neighbour.h_cost = find_dist(neighbour, end)
                 neighbour.parent_node = current
 
                 if neighbour not in open_matrix:
                     open_matrix.append(neighbour)
-
-
-print(run_a_star()[0])
