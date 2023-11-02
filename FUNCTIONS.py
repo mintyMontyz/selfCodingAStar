@@ -50,4 +50,6 @@ def retrace_path(start, end):
         path.append(current_node)
         current_node = current_node.parent_node
 
-    return path.reverse()
+    path.reverse()
+
+    return path
