@@ -46,7 +46,8 @@ def retrace_path(start, end):
     current_node = end
 
     while current_node != start:
-        path.append(current_node)
-        current_node = current_node.parent_node
+        if current_node.parent_node is not None:
+            path.append(current_node)
+            current_node = current_node.parent_node
 
     return path

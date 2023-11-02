@@ -1,8 +1,12 @@
 from FUNCTIONS import *
 
 
-def run_a_star(start_vector, end_vector, dimensions):
+def run_a_star(start_vector, end_vector, dimensions, obstacle_list=[]):
     matrix_field = [[node(x, y) for x in range(dimensions[0])] for y in range(dimensions[1])]
+
+    if obstacle_list is not None:
+        for i in obstacle_list:
+            matrix_field[i[0]][i[1]].traversable = False
 
     open_matrix = []  # open needs to be evaluated
 
