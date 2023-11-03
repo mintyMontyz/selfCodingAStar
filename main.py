@@ -1,5 +1,6 @@
 import pygame as pg
 import pygame.draw
+from time import sleep
 
 from Astar import run_a_star
 
@@ -9,7 +10,9 @@ screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
 WHITE, BLACK, RED, GREEN, PURPLE, BLUE, YELLOW = (255, 255, 255), (0, 0, 0), (255, 0, 0), (0, 255, 0), (255, 0, 247), (0, 43, 255), (255, 205, 0)
 
-node_count_x, node_count_y = 20, 20
+node_count_x, node_count_y = 30, 30
+
+clock = pygame.time.Clock()
 
 class drawn_node(object):
     def __init__(self, x_, y_, size_x, size_y):
@@ -48,7 +51,7 @@ def create_drawn_nodes(space_between_nodes):
     return drawn_nodes
 
 
-draw_nodes = create_drawn_nodes(10)
+draw_nodes = create_drawn_nodes(5)
 
 
 def colour_nodes(path, matrix, open_, closed, start_, end_):
@@ -119,6 +122,7 @@ def main():
             y.update(0)
     running = True
     while running:
+        clock.tick(30)
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -140,13 +144,22 @@ def main():
                                  elif keypress()[1] == 2:
                                      end_vec = (j, i)
 
-            setup = keypress()[0] if keypress()[1] else True
+            if keypress()[1] == 3:
+                setup = keypress()[0]
+                sleep(0.5)
         else:
             x = 0
             if x == 0:
                 path, matrix, open_, closed, start_, end_ = run_a_star(start_vec, end_vec, (node_count_x, node_count_y), obstacles)
                 colour_nodes(path, matrix, open_, closed, start_, end_)
                 x += 1
+
+            if keypress()[1] == 3 and not keypress()[0]:
+                setup = True
+                for x in draw_nodes:
+                    for y in x:
+                        y.update(0)
+                sleep(0.5)
 
         show()
     pg.quit()
